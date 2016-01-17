@@ -2,6 +2,7 @@ var KEY_CODES = require('./keycodes.js');
 var listener = require('./listener');
 var Queue = require('./queue');
 var wait = require('./utils').wait;
+var connect = require('./local-connect');
 
 var APP_MAPPINGS = {
   netflix : {
@@ -121,4 +122,10 @@ function onAction(action, query) {
   }
 }
 
-listener(onAction);
+connect(function(err, res) {
+  if (err) {
+    console.log("ERror", err);
+  } else {
+    listener(onAction);
+  }
+});

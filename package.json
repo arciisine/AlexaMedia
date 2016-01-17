@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/timothysoehnlin/AlexaMedia#readme",
   "dependencies": {
-    "firebase": "^2.3.2"
+    "firebase": "^2.3.2",
+    "libnmap": "^0.2.24"
   }
 }
