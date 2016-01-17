@@ -1,10 +1,12 @@
 var https = require('https');
 var URLParser = require('url');
 
+var config = {}//;
+
 exports.handler = function (event, context) {
   try {
-    var host = 'scorching-fire-5002.firebaseio.com';
-    var path = '/actions.json?auth='; //Secret
+    var host = config.namespace + '.firebaseio.com';
+    var path = '/'+config.topic+'.json?auth='+config.secret;
       
     var query = event.request.intent.slots.query.value;
     var message = { action : query }; 
