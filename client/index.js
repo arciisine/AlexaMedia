@@ -1,63 +1,81 @@
 var KEY_CODES = require('./keycodes.js');
 var listener = require('./listener');
-
-var exec = require('child_process').exec;
+var Queue = require('./queue');
+var wait = require('./utils').wait;
 
 var APP_MAPPINGS = {
   netflix : {
     pkg : 'com.netflix.ninja/.MainActivity',
-    after : function() {
-      sendKeys([KEY_CODES.ENTER])
-    }
+    after : wait(function(queue, cb) {
+      queue.sendKeys([KEY_CODES.ENTER], cb);
+    }, 12000)
   },
   hulu : {
-    pkg : 'com.hulu.livingroomplus/.MainActivity' 
+    pkg : 'com.hulu.plus/com.hulu.livingroomplus.MainActivity' 
   },
 }
 
-
-function adb(cmd, after) {
-  cmd = 'adb shell '+cmd;
-  return exec(cmd, function(err, res) {
-    if (after) after();
-  }); 
+var KEY_MAPPING = {
+  'rewind':      [KEY_CODES.REWIND],
+  'fastforward': [KEY_CODES.FAST_FORWARD],
+  'play':        [KEY_CODES.PLAY],
+  'pause':       [KEY_CODES.PAUSE],
+  'back':        [KEY_CODES.BACK],
+  'stop':        [KEY_CODES.STOP],
+  'home':        [KEY_CODES.HOME]
 }
 
-function sendKeys(keys) {
-  keys.forEach(function(k) {
-    if (typeof k === 'number') {
-      adb('input keyevent '+k);
-    } else {
-      adb('input text "'+k+'"');
-    }
-  });
+
+function doSearch(queue, query, cb) {
+  queue.sendKeys([KEY_CODES.SEARCH], wait(function() {
+    queue.sendKeys([
+      query.join('%s'),
+      KEY_CODES.SPACE, KEY_CODES.DEL, KEY_CODES.DPAD_DOWN
+    ] , wait(function() {
+      queue.sendKeys([KEY_CODES.ENTER], cb);
+    }, 1000))
+  }, 1000));
 }
 
-function openApp(app) {
-  if (app) {
-    return adb('am start -n '+app.pkg, app.after);
-  } else {
-    console.log("App not found");
-  }
+function playNetflix(queue, query, cb) {
+  queue.openApp(APP_MAPPINGS.netflix, wait(function() {
+     queue.sendKeys([
+       KEY_CODES.DPAD_UP, 
+       KEY_CODES.ENTER, 
+       query.join('%s'), 
+       KEY_CODES.SPACE, 
+       KEY_CODES.DEL,
+      ], wait(function() {
+        queue.sendKeys([
+          KEY_CODES.DPAD_RIGHT,
+          KEY_CODES.PLAY
+        ], cb);
+     }, 5000))
+  }, 2000));
 }
+
+var queue;
 
 function onAction(action, query) {
-  var parts = query.split(' ');
+  if (queue) queue.kill();
+  queue = new Queue();
   
   switch(action) {
-    case 'play':
-      break;
-    case 'pause':
-      break;
-    case 'stop':
-      break;
+
+    case 'type':         
+      return queue.sendKeys([query.join('%s')]);
+    case 'netflix':
+      if (query[0] == 'play') query.shift();
+      return playNetflix(query);
+    case 'find':
+      return doSearch(query);
     case 'start':
     case 'launch':
     case 'open':
-      openApp(APP_MAPPINGS[parts.shift()]);
-      break;
-    case 'find':
-      break;
+        queue.openApp(APP_MAPPINGS[query.unshift()]);
+        break;
+    default:
+      return queue.sendKeys(KEY_MAPPING[action] || []);
   }
 }
 

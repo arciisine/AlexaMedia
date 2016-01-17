@@ -9,13 +9,13 @@ ref.authWithCustomToken(config.secret, function(err, res) {
   // Listen for changes to the Bitcoin price
   ref.on("child_added", function(item) {
     // Print the value on the LCD
-    var act = item.val().action;
-    var query = item.val().query;
+    var act = item.val().action.toLowerCase();
+    var query = item.val().query.toLowerCase();
     
     ref.child(item.key()).remove();
     console.log("RECEIVED:", act, query);
     listeners.forEach(function(f) {
-      f(act, query);
+      f(act, query ? query.split(' ') : []);
     })
   });  
 });

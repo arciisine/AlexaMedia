@@ -84,5 +84,11 @@ module.exports = {
   //"MENU" : 82, 
   "NOTIFICATION" : 83, 
   "SEARCH" : 84, 
-  "TAG_LAST_KEYCODE" : 85
+  "PLAY_PAUSE" : 85,
+  "STOP" : 86,
+  "PLAY" : 126,
+  "PAUSE" : 127,
+  "TOP_MENU" : 226,
+  "REWIND" : 89,
+  "FAST_FORWARD" : 90
 };
