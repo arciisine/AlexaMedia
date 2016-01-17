@@ -6,12 +6,19 @@ var wait = require('./utils').wait;
 var APP_MAPPINGS = {
   netflix : {
     pkg : 'com.netflix.ninja/.MainActivity',
-    after : wait(function(queue, cb) {
-      queue.sendKeys([KEY_CODES.ENTER], cb);
-    }, 12000)
+    after :function(queue) {
+      return wait(function(cb) {
+        queue.sendKeys([KEY_CODES.DPAD_CENTER], cb);
+      }, 12000)
+    }
   },
   hulu : {
-    pkg : 'com.hulu.plus/com.hulu.livingroomplus.MainActivity' 
+    pkg : 'com.hulu.plus/com.hulu.livingroomplus.MainActivity',
+    after : function(queue) {
+      return wait(function(cb) {
+        if (cb) cb();
+      }, 12000);
+    } 
   },
 }
 
@@ -29,10 +36,9 @@ var KEY_MAPPING = {
 function doSearch(queue, query, cb) {
   queue.sendKeys([KEY_CODES.SEARCH], wait(function() {
     queue.sendKeys([
-      query.join('%s'),
-      KEY_CODES.SPACE, KEY_CODES.DEL, KEY_CODES.DPAD_DOWN
+      query, KEY_CODES.SPACE, KEY_CODES.DEL, KEY_CODES.DPAD_DOWN
     ] , wait(function() {
-      queue.sendKeys([KEY_CODES.ENTER], cb);
+      queue.sendKeys([KEY_CODES.DPAD_CENTER], cb);
     }, 1000))
   }, 1000));
 }
@@ -41,8 +47,10 @@ function playNetflix(queue, query, cb) {
   queue.openApp(APP_MAPPINGS.netflix, wait(function() {
      queue.sendKeys([
        KEY_CODES.DPAD_UP, 
-       KEY_CODES.ENTER, 
-       query.join('%s'), 
+       null,
+       KEY_CODES.DPAD_CENTER, 
+       null,
+       query, 
        KEY_CODES.SPACE, 
        KEY_CODES.DEL,
       ], wait(function() {
@@ -51,6 +59,39 @@ function playNetflix(queue, query, cb) {
           KEY_CODES.PLAY
         ], cb);
      }, 5000))
+  }, 2000));
+}
+
+function playHulu(queue, query, cb) {
+  var pos = 14; //N
+  var map = {};
+  var alpha = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (var i = 0; i < alpha.length; i++) {
+    map[alpha.charAt(i)] = i;
+  }
+  
+  function convertTextIntoKeys() {
+    var keys = [KEY_CODES.DPAD_UP, KEY_CODES.DPAD_CENTER];
+    var chars = query.toUpperCase().split('');
+    for (var j = 0; j < chars.length;j++) {
+      var nextPos = map[chars[j]];
+      var diff = nextPos - pos;
+      while(diff > 0) { keys.push(KEY_CODES.DPAD_RIGHT); diff--; }
+      while(diff < 0) { keys.push(KEY_CODES.DPAD_LEFT); diff++; }
+      keys.push(KEY_CODES[chars[j]], KEY_CODES.DPAD_CENTER);
+      pos = nextPos;
+    } 
+    return keys;
+  }
+  
+  queue.openApp(APP_MAPPINGS.hulu, wait(function() {
+    queue.sendKeys(convertTextIntoKeys(query), wait(function() {
+      queue.sendKeys([
+        KEY_CODES.DPAD_DOWN,
+        KEY_CODES.DPAD_RIGHT,
+        KEY_CODES.DPAD_CENTER
+      ], cb);
+    }, 7000))
   }, 2000));
 }
 
@@ -63,12 +104,13 @@ function onAction(action, query) {
   switch(action) {
 
     case 'type':         
-      return queue.sendKeys([query.join('%s')]);
+      return queue.sendKeys([query]);
     case 'netflix':
-      if (query[0] == 'play') query.shift();
-      return playNetflix(query);
+      return playNetflix(queue, query);
+    case 'hulu':
+      return playHulu(queue, query);    
     case 'find':
-      return doSearch(query);
+      return doSearch(queue, query);
     case 'start':
     case 'launch':
     case 'open':

@@ -6,7 +6,9 @@ module.exports = function Queue() {
   var QUEUE = [];
   var running = false;
   var done = false;
-  
+  var self = this;
+    
+
   var iterate = function() {
     if (done || !QUEUE.length) {
       running = false;
@@ -16,9 +18,10 @@ module.exports = function Queue() {
     var top = QUEUE.shift();
     var cmd = 'adb shell '+top[0];
     var cb = top[1];
+    console.log(cmd);
     exec(cmd, function() {
-      if (cb) cb(iterate);
-      else    iterate();
+      if (cb) cb();
+      iterate();
     })
   }
     
@@ -29,7 +32,10 @@ module.exports = function Queue() {
   }
   
   var add = this.add = function(cmd, cb) {
+    if (done) return;
+    
     QUEUE.push([cmd, cb]);
+    console.log("Queueing: "+cmd);
     if (!running){
       running = true;
       iterate();
@@ -39,15 +45,26 @@ module.exports = function Queue() {
   var sendKeys = this.sendKeys = function(keys, cb) {
     function itr() {
       if (done) return;
-
+        
       if (keys.length === 0) {
+        console.log("DOne with key sequence");
         if (cb) cb();
       } else {
-        var k = keys.shift();
-        if (typeof k === 'number') {
-          add('input keyevent '+k, wait(iterate, 1));
+        if (keys[0] === null) {
+          keys.shift();
+          wait(itr, 1);
+        } if (typeof keys[0] === 'number') {
+          var out = [];
+          while (typeof keys[0] === 'number' && out.length < 40) {
+            out.push('input keyevent ' + keys.shift());
+          }
+          add("'" + out.join(';') +"'",  wait(itr, 1));
         } else {
-          add('input text "'+k+'"', wait(iterate, 1));
+          var out = [];
+          while (typeof keys[0] === 'string') {
+            out.push(keys.shift().replace(' ', '%s'));
+          }
+          add('input text "'+out.join('%s')+'"', wait(itr, 1));
         }  
       }
     }
@@ -58,14 +75,12 @@ module.exports = function Queue() {
     if (done) return;
     
     if (app) {
-      sendKeys([KEY_CODES.HOME], wait(function() {
-        add('am start -n '+app.pkg, function() {
-          if (app.after) app.after(cb);
-          else {
-            cb()
-          }
-        })
-      }, 2000));
+      add('am start -W -S -a android.intent.action.MAIN -n '+app.pkg, function() {
+        if (app.after) app.after(self)(cb);
+        else {
+          cb()
+        }
+      })
     } else {
       console.log("App not found");
     }
