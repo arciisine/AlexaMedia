@@ -43,9 +43,11 @@ module.exports = function Queue() {
   }
   
   var sendKeys = this.sendKeys = function(keys, cb) {
+    keys = keys.slice();
+
     function itr() {
       if (done) return;
-        
+              
       if (keys.length === 0) {
         console.log("DOne with key sequence");
         if (cb) cb();

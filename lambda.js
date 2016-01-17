@@ -37,7 +37,7 @@ exports.handler = function (event, context) {
             "card": {
               "type": "Simple",
               "title": "Media Control",
-              "content": query
+              "content": (action||'') + " " + (query||'')
             },
             "shouldEndSession": true
           }        
