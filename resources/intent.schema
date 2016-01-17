@@ -1,0 +1,19 @@
+{
+  "intents": [{    
+    "intent":  "Media",
+      "slots": [
+      {
+        "name":"query",
+        "type":"LITERAL"
+      },
+      {
+        "name" : "action",
+        "type" : "ACTION"
+      }  
+    ]
+  },{
+    "intent": "AMAZON.YesIntent"
+  },{
+    "intent": "AMAZON.NoIntent"
+  }]
+}

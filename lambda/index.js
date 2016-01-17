@@ -34,10 +34,11 @@ MediaControl.prototype.intentHandlers = {
   },
   "AMAZON.YesIntent": function (intent, session, response) {
     var msg = session.attributes;
-    
+    console.log("Yes Intent");
+    console.log(msg);
     if (msg) {
       proxy(config, msg, function() {
-        response.tellWithCard("", "Media Control", msg.all);
+        response.tell("Will now " + msg.all);
       }, function(err) {
         response.tell("Invalid request. "+msg.all);
       });
@@ -54,5 +55,7 @@ MediaControl.prototype.intentHandlers = {
 exports.handler = function (event, context) {
   // Create an instance of the HelloWorld skill.
   var app = new MediaControl();
+  console.log(event.session.attributes);
+  console.log(event.intent);
   app.execute(event, context);
 };

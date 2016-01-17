@@ -1,0 +1,9 @@
+Media to go {action}
+Media to {action}
+Media to {action} {a|query}
+Media to {action} {a|query} {b|query}
+Media to {action} {a|query} {b|query} {c|query}
+Media to {action} {a|query} {b|query} {c|query} {d|query}
+Media to {action} {a|query} {b|query} {c|query} {d|query} {e|query}
+Media to {action} {a|query} {b|query} {c|query} {d|query} {e|query} {f|query}
+Media to {action} {a|query} {b|query} {c|query} {d|query} {e|query} {f|query} {g|query}
