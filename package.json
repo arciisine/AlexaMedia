@@ -1,0 +1,22 @@
+{
+  "name": "alexa-media",
+  "version": "1.0.0",
+  "description": "",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothysoehnlin/AlexaMedia.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timothysoehnlin/AlexaMedia/issues"
+  },
+  "homepage": "https://github.com/timothysoehnlin/AlexaMedia#readme",
+  "dependencies": {
+    "firebase": "^2.3.2"
+  }
+}
