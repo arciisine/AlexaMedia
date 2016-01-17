@@ -52,7 +52,7 @@ module.exports = function Queue() {
       } else {
         if (keys[0] === null) {
           keys.shift();
-          wait(itr, 1);
+          wait(itr, 30);
         } if (typeof keys[0] === 'number') {
           var out = [];
           while (typeof keys[0] === 'number' && out.length < 40) {
@@ -62,7 +62,7 @@ module.exports = function Queue() {
         } else {
           var out = [];
           while (typeof keys[0] === 'string') {
-            out.push(keys.shift().replace(' ', '%s'));
+            out.push(keys.shift().replace(/ |[^A-Za-z]/g, '%s'));
           }
           add('input text "'+out.join('%s')+'"', wait(itr, 1));
         }  
