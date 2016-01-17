@@ -9,7 +9,8 @@ exports.handler = function (event, context) {
     var path = '/'+config.topic+'.json?auth='+config.secret;
       
     var query = event.request.intent.slots.query.value;
-    var message = { action : query }; 
+    var action = event.request.intent.slots.action.value;
+    var message = { action : action, query : query }; 
     var data = JSON.stringify(message);        
               
     // An object of options to indicate where to post to
