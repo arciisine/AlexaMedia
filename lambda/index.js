@@ -46,7 +46,7 @@ MediaControl.prototype.intentHandlers = {
   },
   "AMAZON.NoIntent": function(intent, session, response) {
     session.attributes = {};
-    response.tell("Cancled");
+    response.tell("Canceled");
   }
 };
 
