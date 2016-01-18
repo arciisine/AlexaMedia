@@ -67,7 +67,8 @@ Queue.prototype._sendKeySet = function(keys, defer) {
 }
 
 Queue.prototype.sendKeys = function(keys) {
-  var def = Q.defer();  
+  var def = Q.defer();
+  keys = Array.isArray(keys) ? keys : Array.prototype.slice.call(arguments, 0);  
   process.nextTick(this._sendKeySet.bind(this, keys.slice(), def));
   return def.promise;
 }

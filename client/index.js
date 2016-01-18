@@ -20,12 +20,9 @@ function onAction(action, query) {
       }    
       //Tell the adb queue to run the proper commands to open the app
       return app.open(queue);
-  } else if (action === 'type') {
-    //Type out text into form
-    return queue.sendKeys([query]);
   } else {
     //Otherwise try to call key of whatever command came in
-    return queue.sendKeys(interaction.keyLookup[action] || []);
+    return interaction.keyLookup[action](queue, query);
   }
 }
 
