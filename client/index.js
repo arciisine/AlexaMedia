@@ -7,7 +7,9 @@ var mappings = require('./mappings');
 var queue;
 
 function onAction(action, query) {
-  if (queue) queue.kill();
+  if (queue) {
+    queue.kill();
+  }
   queue = new Queue();
   
   switch(action) {

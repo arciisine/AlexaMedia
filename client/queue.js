@@ -5,12 +5,15 @@ var KEY_CODES = require('./keycodes');
 module.exports = function Queue() {
   var QUEUE = [];
   var running = false;
-  var done = false;
   var self = this;
     
+  var execute = function(cmd, cb) {
+    console.log(cmd);
+    exec(cmd, cb);
+  } 
 
   var iterate = function() {
-    if (done || !QUEUE.length) {
+    if (!execute || !QUEUE.length) {
       running = false;
       return;
     }
@@ -18,22 +21,19 @@ module.exports = function Queue() {
     var top = QUEUE.shift();
     var cmd = 'adb shell '+top[0];
     var cb = top[1];
-    console.log(cmd);
-    exec(cmd, function() {
+    
+    execute(cmd, function() {
       if (cb) cb();
       iterate();
     })
   }
     
   var kill = this.kill = function(){
-    QUEUE = [];
-    running = false;
-    done = false;
+    console.log("Killing queue");
+    execute = null;    
   }
   
-  var add = this.add = function(cmd, cb) {
-    if (done) return;
-    
+  var add = this.add = function(cmd, cb) {    
     QUEUE.push([cmd, cb]);
     console.log("Queueing: "+cmd);
     if (!running){
@@ -46,7 +46,7 @@ module.exports = function Queue() {
     keys = keys.slice();
 
     function itr() {
-      if (done) return;
+      if (!execute) return;
               
       if (keys.length === 0) {
         console.log("DOne with key sequence");
@@ -74,7 +74,7 @@ module.exports = function Queue() {
   }
   
   this.openApp = function(app, cb) {
-    if (done) return;
+    if (!execute) return;
     
     if (app) {
       add('am start -W -S -a android.intent.action.MAIN -n '+app.pkg, function() {
