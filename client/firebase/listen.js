@@ -22,7 +22,7 @@ function start() {
         try {
           f(act, query);
         } catch (e) {
-          console.log("Error, e");
+          console.log("Error", e);
         }
       })
     });  

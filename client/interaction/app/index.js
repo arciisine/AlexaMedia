@@ -1,5 +1,5 @@
 var APP_MAPPINGS = module.exports.APP_MAPPINGS = {
-  //amazon : require('./amazon'),
+  amazon : require('./amazon'),
   netflix : require('./netflix'),
   hulu : require('./hulu'),
 }
@@ -9,7 +9,7 @@ var APP_REGEX = new RegExp("(on|with|in)? ("+Object.keys(APP_MAPPINGS).join('|')
 
 module.exports = function getApp(query) {
   var cls = DEFAULT_APP;
-     
+  
   //Look for any app name
   query = query.replace(APP_REGEX, function(all, pre, appFound) {
     cls = APP_MAPPINGS[appFound.toLowerCase()];
