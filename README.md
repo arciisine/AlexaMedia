@@ -41,7 +41,6 @@ Things you will need:
   - Local machine with network access to Fire TV Stick
   - FireTV Stick with Developer mode turned on
   - NodeJS
-  - nmap
   - adb (Android Development Kit)
 
 ###Configure Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
@@ -93,7 +92,7 @@ Things you will need:
 ###Run Local NodeJS ADB Connection
   - Run `npm install` to prep application
   - Run `node client/` to run application
-    - It uses nmap to find IP address of firetv stick
+    - It uses port scanning to find IP address of firetv stick
     - You should see the message that it is connected to IP
   - The client should now read and delete the firebase messages as they come in
      - This means your firebase data store should generally be empty
