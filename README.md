@@ -37,7 +37,8 @@ Things you will need:
   - NodeJS
   - nmap
   - adb (Android Development Kit)
- 
+
+###Architecture of Application 
 ![Architecture of Application](/resources/data-flow.png?raw=true "Architecture of Application")
 
 ###Configure Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
