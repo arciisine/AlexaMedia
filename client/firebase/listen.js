@@ -19,7 +19,11 @@ function start() {
       //Run listeners
       console.log("RECEIVED:", act, query);
       listeners.forEach(function(f) {
-        f(act, query);
+        try {
+          f(act, query);
+        } catch (e) {
+          console.log("Error, e");
+        }
       })
     });  
   });
