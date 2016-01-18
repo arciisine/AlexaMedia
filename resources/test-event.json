@@ -1,0 +1,31 @@
+{
+  "session": {
+    "new": false,
+    "sessionId": "session1234",
+    "attributes": {},
+    "user": {
+      "userId": null
+    },
+    "application": {
+      "applicationId": "<app-id>"
+    }
+  },
+  "version": "1.0",
+  "request": {
+    "intent": {
+      "slots": {
+        "query": {
+          "name": "query",
+          "value": "netflix"
+        },
+        "action" : {
+          "name": "action",
+          "value": "play"
+        }
+      },
+      "name": "Media"
+    },
+    "type": "IntentRequest",
+    "requestId": "request5678"
+  }
+}

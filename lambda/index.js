@@ -36,7 +36,7 @@ MediaControl.prototype.intentHandlers = {
     var msg = session.attributes;
     if (msg) {
       proxy(config, msg, function() {
-        response.tell("Will now " + msg.all);
+        response.tellWithCard("Will now " + msg.all, "Now Playing", msg.query);
       }, function(err) {
         response.tell("Invalid request. "+msg.all);
       });

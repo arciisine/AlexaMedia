@@ -33,7 +33,9 @@ var APP_MAPPINGS = module.exports.APP_MAPPINGS = {
       queue.sendKeys([
         KEY_CODES.DPAD_UP, 
         null,
+        null,
         KEY_CODES.DPAD_CENTER, 
+        null,
         null,
         query, 
         KEY_CODES.SPACE, 
@@ -62,7 +64,7 @@ var APP_MAPPINGS = module.exports.APP_MAPPINGS = {
       }
       
       function convertTextIntoKeys() {
-        var keys = [KEY_CODES.DPAD_UP, KEY_CODES.DPAD_CENTER];
+        var keys = [KEY_CODES.DPAD_UP, KEY_CODES.DPAD_CENTER, null];
         var chars = query.toUpperCase().split('');
         for (var j = 0; j < chars.length;j++) {
           var nextPos = map[chars[j]];

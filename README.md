@@ -1,0 +1,87 @@
+Amzon Echo and Fire TV Stick Integration
+========================================
+
+How It Works:
+  - Alexa ask tv to pause
+  - Alexa ask tv to rewind
+  - Alexa ask tv to play ice age (Defaults to netflix)
+  - Alexa ask tv to play gotham on hulu
+  
+Apps currently supporting search and play:
+  - Hulu    
+  - Netflix  
+
+The search and play feature relies on adb input events, and so timing is sensitive.  It may require some variation depending on FireTV vs FireTV stick.  This may even work with chromecast (or any other system accesible via adb).  
+
+Setup
+---------------------------------------
+
+###Requirements
+Things you will need:
+  - Amazon Echo (With developer mode turned on)
+  - Amazon Web Services Account (free)
+  - Amazon Developer Account (free)
+  - Firebase Account (free)
+  - Local machine with network access to Fire TV Stick
+  - FireTV Stick with Developer mode turned on
+  - NodeJS
+  - nmap
+  - adb (Android Development Kit)
+ 
+
+
+###Setup Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
+  - Add New Skill
+  - Pick a good invocation name, I use "tv"
+  - Endpoint
+    - We will be using AWS Lambda to host the speech handler
+    - Will setup later
+  - Intent Schema (Use <project>/reousrces/intent.schema)
+  - Create a new Custom Slot Type
+    - Name is ACTION
+    - Contents is in <project>/resources/action.type.slot
+  - Sample Utterances
+    - Use utterances in resources/utterances.sample
+  - Everything else is optional, as you will not be publishing your app
+  
+###Setup Firebase Access (https://firebase.com)
+  - Utilize <project>/resources/firebase-rules.json
+  - Generate new secret key under secrets menu
+  
+###Setup Configuration JSON
+  - Setup fill out <project>/resources/config.sample.json to config.json
+  - Copy or symlink <project>/resources/config.json to 
+    - <project>/client/ folder and 
+    - <project>/lambda/ folder 
+
+###Setup Amazon Lambda 
+  - Generate zip file: `cd lambda; zip ../lambda.zip *; cd -`
+  - Go to https://console.aws.amazon.com/lambda/home
+  - Make sure you are in North East Region (Required for Alexa)
+  - Create a Lambda Function
+  - Skip blueprint
+  - Give it a Name
+  - Runtime is Node.js
+  - Upload a .ZIP file (Select <project>/lambda.zip)
+  - You will also need to create a 'Basic execution role' if you don't have one already
+  - After creating the Lambda, go to the Event Sources tab and "Add event source"
+    - Event source type should be "Alexa Skills Kit"
+  - Under Actions, Configure test event
+    - User <project>/resources/test-event.json
+    - Fill in your app id 
+  - Run Test
+    - You should now start to see events showing up in your firebase console
+  - Configure your Alexa Skill
+    - Put your Lambda ARN into the skill configuration
+    - You should now be able to communicate with your Alexa using the invocation name you have
+    - The events should show up in firebase.
+
+###Run Local NodeJS ADB Connection
+  - Run `npm install` to prep application
+  - Run `node client/` to run application
+    - It uses nmap to find IP address of firetv stick
+    - You should see the message that it is connected to IP
+  - The client should now read and delete the firebase messages as they come in
+     - This means your firebase data store should generally be empty
+  - If all goes well your echo commands should trigger the proper sequence of adb operations
+     
