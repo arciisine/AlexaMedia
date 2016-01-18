@@ -32,7 +32,8 @@ function onAction(action, query) {
 
 connect(function(err, res) {
   if (err) {
-    console.log("ERror", err);
+    console.log("Error", err);
+    process.exit(1);
   } else {
     listener(onAction);
   }

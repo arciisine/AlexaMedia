@@ -1,7 +1,6 @@
 var os = require('os');
-var nmap = require('libnmap');
+var portscanner = require('portscanner');
 var exec = require('child_process').exec;
-
 
 function getLocalIp() {
   var ip;
@@ -21,38 +20,41 @@ function getLocalIp() {
   return ip;  
 }
 
-function getFireTVIP(cb) {
+function getAdbIP(cb) {
   var mask = getLocalIp().replace(/\d+$/, '');
-  var key = mask + '2-255';
-  nmap.scan({
-    ports : '5555-5585',
-    range : [key],
-  }, function(err, report) {
-    if (err) cb(err);
-    if (!report || !report[key]) return;
+  var ips = [];
+  for (var i = 2; i <= 255; i++) {
+    ips.push(mask + i);
+  }
 
-    report = report[key];
-
-    report.host.forEach(function(host) {
-      var ip = host.address[0].item.addr;
-      host.ports.forEach(function(port) {
-        if (port.port && port.port[0].state && port.port[0].state[0].item.state === 'open') { //Open port
-          var portId = parseInt(port.port[0].item.portid);
-          if (portId >= 5555 && portId <= 5585) {
-            //Found it
-            cb(null, ip);
-            cb = function() {}; //Do nothing if called again
-          }
-        }
-      });
+  var count = 0;
+  
+  function checkIP(ip) {
+    count++;
+    portscanner.checkPortStatus(5555, ip, function(error, port) {
+      if (error || port !== 'open') {
+        count--;
+        itr();
+      } else {
+        cb(null, ip);
+        cb = function() {};          
+      }
     });
-    cb("Couldn't find a firetv on your network");
-  });
+  }
+  
+  function itr() {
+    if (!ips.length && !count) {
+      return cb("Couldn't find an adb device on your network");
+    }
+    while (ips.length && count < 30) {
+      checkIP(ips.shift());
+    }
+  }
+  itr();
 }
 
-
 function connect(cb) {
-  getFireTVIP(function(err, ip) {
+  getAdbIP(function(err, ip) {
     if (err) return cb(err);
     console.log("Connecting to ", ip);
     exec('adb connect '+ip, function(err, res) {
