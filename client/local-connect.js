@@ -57,8 +57,9 @@ function connect(cb) {
   getAdbIP(function(err, ip) {
     if (err) return cb(err);
     console.log("Connecting to ", ip);
-    exec('adb connect '+ip, function(err, res) {
+    exec('adb kill-server; adb start-server; adb connect '+ip, function(err, res) {
       if (!err) {
+        console.log("Connected!");
         cb(err);
       } else {
         cb(null, res);;

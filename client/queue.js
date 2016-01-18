@@ -49,7 +49,7 @@ module.exports = function Queue() {
       if (!execute) return;
               
       if (keys.length === 0) {
-        console.log("DOne with key sequence");
+        console.log("Done with key sequence");
         if (cb) cb();
       } else {
         if (keys[0] === null) {
