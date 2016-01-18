@@ -26,7 +26,7 @@ MediaControl.prototype.intentHandlers = {
       response.ask("Do you want to "+msg.all);
     } else {
       proxy(config, msg, function() {
-        response.tellWithCard("", "Media Control", msg.all);
+        response.tell("");
       }, function(err) {
         response.tell("Invalid request. "+msg.all);
       });
