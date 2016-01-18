@@ -1,6 +1,6 @@
 var APP_MAPPINGS = module.exports.APP_MAPPINGS = {
-  amazon : require('./amazon'),
   netflix : require('./netflix'),
+  amazon : require('./amazon'),
   hulu : require('./hulu'),
 }
 

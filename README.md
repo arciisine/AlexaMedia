@@ -102,6 +102,14 @@ Things you will need:
      
 Next Steps
 ------------------------------------------------
+  * Allow for more intelligent usage
+    * Allow firebase to retain data
+    * When answering a play/watch query, look for most recent usage if service isn't provided
+    * Allow for user to set default service
+    * Allow for user to set keywords that map to specific queries
+      * maybe even allow for a set of shows/movies to be mapped to a keyword and choose at random
+    * Allow for search keywords to be driven by social media
+      * Find what is trending on twitter for netflix and respond with that show
   * Figure out how to play Amazon Videos
   * Wait for Amazon to finally integrate this functionality into Echo
   * Add support for other Applications

@@ -13,6 +13,7 @@ var actions = module.exports = {
   rewind  :  utils.timeline(KEY_CODES.REWIND, 'fast', 15000),
   replay  :  utils.timeline(KEY_CODES.REWIND, 'slow', 1000),
   watch   :  function(queue, query) { return this.play(queue, query); },
+  power   :  utils.keySender(KEY_CODES.POWER),
   play    :  function(queue, query) {
     if (query) {
         var app = appLookup(query);  
