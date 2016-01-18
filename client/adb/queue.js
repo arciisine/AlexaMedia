@@ -55,13 +55,17 @@ Queue.prototype._sendKeySet = function(keys, defer) {
         out.push('input keyevent ' + keys.shift());
       }
       this.add("'" + out.join(';') +"'").then(itr);
-    } else { //If a text string
+    } else if (typeof keys[0] === 'string') { //If a text string
       while (typeof keys[0] === 'string') {
         //Remove all non letter characters
         // Replace spaces with '%s'
         out.push(keys.shift().replace(/ |[^A-Za-z]/g, '%s')); 
       }
       this.add('input text "'+out.join('%s')+'"').then(itr);
+    } else {
+      console.log("Unknown item", keys[0]);
+      keys.shift();
+      process.nextTick(itr);
     }  
   }
 }

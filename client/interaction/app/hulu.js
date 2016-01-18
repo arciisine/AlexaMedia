@@ -10,7 +10,7 @@ function HuluKeyboardConverter(query) {
     map[alpha.charAt(i)] = i;
   }
 
-  var keys = [KEY_CODES.DPAD_UP, KEY_CODES.DPAD_CENTER, null];
+  var keys = [];
   var chars = query.toUpperCase().split('');
   for (var j = 0; j < chars.length;j++) {
     var nextPos = map[chars[j]];
@@ -29,12 +29,16 @@ BaseApp.extend(Hulu);
 
 Hulu.prototype.pkg = 'com.hulu.plus/com.hulu.livingroomplus.MainActivity';
 
-Hulu.prototype.after = function(queue) {
+Hulu.prototype.afterOpen = function(queue) {
   return Q.delay(12000);
 }
 
 Hulu.prototype.findAndPlay =  function(queue, query) {
   return Q.delay(1)
+    .then(function() {
+      return queue.sendKeys([KEY_CODES.DPAD_UP, KEY_CODES.DPAD_CENTER]);
+    })
+    .delay(1000)
     .then(function() {
       return queue.sendKeys(HuluKeyboardConverter(query))    
     })

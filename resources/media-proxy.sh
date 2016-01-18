@@ -3,15 +3,15 @@
 
 # The following part always gets executed.
 echo "This part always gets executed"
-ROOT=/home/pi/firetv
+ROOT=/home/pi/media-proxy
 
 # The following part carries out specific functions depending on arguments.
 case "$1" in
   start)
-    cd $ROOT
-    node client/ &
+    pushd $ROOT
+    node client/ > /var/log/media-proxy.log &
     echo "media-proxy is alive"
-    cd - 
+    popd 
     ;;
   stop)
     pkill -9 node # will kill all node
