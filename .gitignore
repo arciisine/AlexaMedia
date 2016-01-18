@@ -3,3 +3,5 @@ config.json
 node_modules/
 npm-debug.log
 lambda.zip
+.DS_STORE
+**/.DS_STORE
