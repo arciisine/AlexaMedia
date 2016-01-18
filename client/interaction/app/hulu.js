@@ -1,5 +1,6 @@
+var Q = require('q');
 var BaseApp = require('./base');
-var KEY_CODES = require('../keycodes')
+var KEY_CODES = require('../key-codes')
 
 function HuluKeyboardConverter(query) {
   var pos = 14; //N
@@ -27,18 +28,23 @@ function Hulu() {}
 Hulu.prototype = BaseApp.prototype;
 Hulu.prototype.pkg = 'com.hulu.plus/com.hulu.livingroomplus.MainActivity';
 
-Hulu.protoype.after = function(queue, cb) {
-  return this.wait(cb, 12000);
+Hulu.prototype.after = function(queue) {
+  return Q.delay(12000);
 }
 
-Hulu.prototype.find =  function(queue, query, cb) {
-  queue.sendKeys(HuluKeyboardConverter(query), this.wait(function() {
-    queue.sendKeys([
-      KEY_CODES.DPAD_DOWN,
-      KEY_CODES.DPAD_RIGHT,
-      KEY_CODES.DPAD_CENTER
-    ], cb);
-  }, 7000))
+Hulu.prototype.find =  function(queue, query) {
+  return Q.delay(1)
+    .then(function() {
+      return queue.sendKeys(HuluKeyboardConverter(query))    
+    })
+    .delay(7000)
+    .then(function() {
+      return queue.sendKeys([
+        KEY_CODES.DPAD_DOWN,
+        KEY_CODES.DPAD_RIGHT,
+        KEY_CODES.DPAD_CENTER
+      ]);
+    });
 }
 
 module.exports = Hulu;

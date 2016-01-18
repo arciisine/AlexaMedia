@@ -1,8 +1,10 @@
+var Q = require('q');
 var os = require('os');
 var portscanner = require('portscanner');
 var exec = require('child_process').exec;
 
 function getLocalIp() {
+  var def = Q.defer();
   var ip;
   var ifaces = os.networkInterfaces();
   Object.keys(ifaces).forEach(function (ifname) {
@@ -17,11 +19,17 @@ function getLocalIp() {
     });
   });
   
-  return ip;  
+  process.nextTick(function() {
+    def.resolve(ip);
+  })
+  
+  return def.promise;
 }
 
-function getAdbIP(cb) {
-  var mask = getLocalIp().replace(/\d+$/, '');
+function getAdbIP(localIp) {
+  var def = Q.defer();
+  
+  var mask = localIp.replace(/\d+$/, '');
   var ips = [];
   for (var i = 2; i <= 255; i++) {
     ips.push(mask + i);
@@ -36,38 +44,37 @@ function getAdbIP(cb) {
         count--;
         itr();
       } else {
-        cb(null, ip);
-        cb = function() {};          
+        def.resolve(ip);
       }
     });
   }
   
   function itr() {
     if (!ips.length && !count) {
-      return cb("Couldn't find an adb device on your network");
+      return def.reject("Couldn't find an adb device on your network");
     }
     while (ips.length && count < 30) {
       checkIP(ips.shift());
     }
   }
-  itr();
+  process.nextTick(itr);
+  
+  return def.promise();
 }
 
-function adbConnect(cb) {
-  getAdbIP(function(err, ip) {
-    if (err) return cb(err);
-    console.log("Connecting to ", ip);
-    
-    //Restart and start adb server
-    exec('adb kill-server; adb start-server; adb connect '+ip, function(err, res) {
-      if (!err) {
-        console.log("Connected!");
-        cb(err);
-      } else {
-        cb(null, res);;
-      }
-    })
-  });
+function adbConnect() {
+  return Q(getLocalIp)
+    .then(getAdbIP)
+    .then(function(ip) {
+      console.log("Connecting to ", ip);
+      
+      //Restart and start adb server
+      return Q.nfcall(exec, 'adb kill-server; adb start-server; adb connect '+ip)
+        .then(function(x) { 
+          console.log("Connected!");
+          return x; 
+        })
+    });
 } 
 
 module.exports = adbConnect

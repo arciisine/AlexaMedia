@@ -1,15 +1,19 @@
-var wait = require('../../utils').wait;
-
 function BaseApp() {}
-BaseApp.prototype.open = function(queue) {          
-  var cb = null
-  if (this.query) { //If a query is provided
-    cb = this.find.bind(this, queue, this.query);
-  }
-  queue.openApp(this.pkg, this.after.bind(this, queue, cb));
+BaseApp.prototype.open = function(queue) {
+  var self  = this;
+  
+  return queue.openApp(this.pkg)
+    .then(function() {
+      return self.after(queue);
+    })
+    .then(function() {
+      if (self.query) { //If a query is provided
+        self.find(queue, self.query);
+      }
+    })
 }
-BaseApp.prototype.wait = wait;
-BaseApp.prototype.after = function(queue, cb) {}
-BaseApp.prototype.find = function(queue, query, cb) {}
+
+BaseApp.prototype.afterOpen = function(queue) {}
+BaseApp.prototype.find = function(queue, query) {}
 
 module.exports = BaseApp;

@@ -1,13 +1,13 @@
 var exec = require('child_process').exec;
-var wait = require('../utils').wait;
+var Q = require('q');
 
 function Queue() {
   this._data = [];
 }
 
-Queue.prototype.execute = function(cmd, cb) {
+Queue.prototype.execute = function(cmd) {
   console.log(cmd);
-  exec(cmd, cb);
+  return Q.nfcall(exec, cmd);
 } 
 
 Queue.prototype.run = function() {
@@ -18,10 +18,12 @@ Queue.prototype.run = function() {
   var top = this._data.shift();
   var cmd = 'echo '+top.cmd;
   
-  this.execute(cmd, (function() {
-    if (top.cb) top.cb();
-    this.run();
-  }).bind(this))
+  return this.execute(cmd)
+    .then(
+      top.def.resolve.bind(top.def), 
+      top.def.reject.bind(top.def)
+    )
+    .then(this.run.bind(this))
 }
 
 Queue.prototype.kill = function(){
@@ -29,49 +31,51 @@ Queue.prototype.kill = function(){
   this.execute = null;    
 }
   
-Queue.prototype.add = function(cmd, cb) {    
-  this._data.push([cmd, cb]);
+Queue.prototype.add = function(cmd) {
+  var def = Q.defer();  
+  this._data.push({cmd:cmd, def:def}  );
   console.log("Queueing: "+cmd);
   if (this._data.length === 1){ //If queue was empty, start running
-    this.run();
+    process.nextTick(this.run.bind(this));
   }  
+  return def.promise;
 }
 
-Queue.prototype.sendKeys = function(keys, cb) {
-  keys = keys.slice();
-
-  function itr() {
-    var out = [];
-    
-    if (!this.execute) return;      
-            
-    if (keys.length === 0) {
-      console.log("Done with key sequence");
-      if (cb) cb();
-    } else {
-      if (keys[0] === null || typeof keys[0] === 'number' && keys[0] > 1000) {
-        keys.shift();
-        wait(itr, keys[0] || 30);
-      } if (typeof keys[0] === 'number') {
-        while (typeof keys[0] === 'number' && out.length < 40) {
-          out.push('input keyevent ' + keys.shift());
-        }
-        this.add("'" + out.join(';') +"'",  wait(itr, 1));
-      } else {
-        while (typeof keys[0] === 'string') {
-          out.push(keys.shift().replace(/ |[^A-Za-z]/g, '%s'));
-        }
-        this.add('input text "'+out.join('%s')+'"', wait(itr, 1));
-      }  
-    }
-  }
-  itr();
-}
-
-Queue.prototype.openApp = function(activity, cb) {
-  if (!this.execute) return;
+Queue.prototype.sendKeySet = function(keys, defer) {
+  if (!this.execute) return; 
   
-  this.add('am start -W -S -a android.intent.action.MAIN -n '+activity, cb);
+  var out = [];
+  var itr = this.sendKeySet.bind(this, keys, defer);
+              
+  if (keys.length === 0) { //Done
+    console.log("Done with key sequence");
+    defer.resolve();    
+  } else {
+    if (typeof keys[0] === 'number') { //If a keycode
+      while (typeof keys[0] === 'number' && out.length < 40) {
+        out.push('input keyevent ' + keys.shift());
+      }
+      this.add("'" + out.join(';') +"'").then(itr);
+    } else { //If a text string
+      while (typeof keys[0] === 'string') {
+        //Remove all non letter characters
+        // Replace spaces with '%s'
+        out.push(keys.shift().replace(/ |[^A-Za-z]/g, '%s')); 
+      }
+      this.add('input text "'+out.join('%s')+'"').then(itr);
+    }  
+  }
+}
+
+Queue.prototype.sendKeys = function(keys) {
+  var def = Q.defer();  
+  this.sendKeySet(keys.slice(), def);
+  return def.promise;
+}
+
+Queue.prototype.openApp = function(activity) {
+  if (!this.execute) return;
+  return this.add('am start -W -S -a android.intent.action.MAIN -n '+activity);
 }
 
 module.exports = Queue;

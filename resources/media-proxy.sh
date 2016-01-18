@@ -14,7 +14,7 @@ case "$1" in
     cd - 
     ;;
   stop)
-    pkill -9 "media-proxy"
+    pkill -9 node # will kill all node
     ;;
   *)
     echo "Usage: /etc/init.d/media-proxy {start|stop}"

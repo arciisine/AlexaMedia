@@ -1,4 +1,4 @@
-var KEY_CODES = require('./keycodes')
+var KEY_CODES = require('../key-codes')
 var BaseApp = require('./base');
 
 function Amazon() {}

@@ -1,4 +1,4 @@
-var KEY_CODES = require('./keycodes');
+var KEY_CODES = require('./key-codes')
 
 module.exports = {
   'rewind':      [KEY_CODES.REWIND,KEY_CODES.REWIND,KEY_CODES.REWIND],

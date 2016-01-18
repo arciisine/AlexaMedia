@@ -14,7 +14,7 @@ function start() {
       var query = (item.val().query || '').toLowerCase();
       
       //Consume message
-      ref.child(item.key()).remove();
+      //ref.child(item.key()).remove();
       
       //Run listeners
       console.log("RECEIVED:", act, query);
