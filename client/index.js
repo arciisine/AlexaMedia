@@ -20,7 +20,7 @@ function onAction(action, query) {
       queue = null;
     }); 
   } else {
-    console.log("Unknown action", action);
+    console.log("Unknown action", action, query);
   }
 }
 
