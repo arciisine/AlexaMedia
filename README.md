@@ -95,3 +95,17 @@ Things you will need:
      - This means your firebase data store should generally be empty
   - If all goes well your echo commands should trigger the proper sequence of adb operations
      
+     
+Next Steps
+------------------------------------------------
+  * Install the node client on my Raspberry Pi to act as Firebase event listener
+    * Should allow me to use this with other Skills if I make more
+    * Verify code works properly on nodejs version available for Raspberry Pi
+  * Figure out how to play Amazon Videos
+  * Wait for Amazon to finally integrate this functionality into Echo
+  * Add support for other Applications
+    * ...
+  * Figure out if using `adb shell input text` is possible for Hulu
+  * Figure out if there is anyway to get the information of the running video
+  * Figure out if integrating with chromecast would be feasible
+     * Should just be a different set of `adb` commands
