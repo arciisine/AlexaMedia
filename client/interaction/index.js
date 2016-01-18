@@ -12,7 +12,7 @@ var actions = module.exports = {
   type    :  function(queue, query) { return queue.sendKeys(query); },
   rewind  :  utils.timeline(KEY_CODES.REWIND, 'fast', 15000),
   replay  :  utils.timeline(KEY_CODES.REWIND, 'slow', 1000),
-  watch   :  function(queue, query) { this.play(queue, query); },
+  watch   :  function(queue, query) { return this.play(queue, query); },
   play    :  function(queue, query) {
     if (query) {
         var app = appLookup(query);  

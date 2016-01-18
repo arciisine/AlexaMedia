@@ -14,7 +14,7 @@ function onAction(action, query) {
   
   queue = new AdbQueue();
   //Otherwise try to call key of whatever command came in
-  var operator = interaction[action];
+  var operator = interaction[action].bind(interaction);
   if (operator) {
     return operator(queue, query).then(function() {
       queue = null;
