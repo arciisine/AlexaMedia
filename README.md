@@ -20,6 +20,7 @@ Sample phrases that would work:
 Apps currently supporting search and play:
   - Hulu 
   - Netflix
+  - Amazon (Though it can differentiate between paid/free/owned.  Need to figure out if it abuses one click purchase)
 
 The search and play feature relies on adb input events, and so timing is sensitive.  It may require some variation depending on FireTV vs FireTV stick.  This may even work with chromecast (or any other system accesible via adb).  
 
