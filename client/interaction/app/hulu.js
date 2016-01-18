@@ -25,14 +25,15 @@ function HuluKeyboardConverter(query) {
 }
   
 function Hulu() {}
-Hulu.prototype = BaseApp.prototype;
+BaseApp.extend(Hulu);
+
 Hulu.prototype.pkg = 'com.hulu.plus/com.hulu.livingroomplus.MainActivity';
 
 Hulu.prototype.after = function(queue) {
   return Q.delay(12000);
 }
 
-Hulu.prototype.find =  function(queue, query) {
+Hulu.prototype.findAndPlay =  function(queue, query) {
   return Q.delay(1)
     .then(function() {
       return queue.sendKeys(HuluKeyboardConverter(query))    

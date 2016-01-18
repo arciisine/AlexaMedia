@@ -16,7 +16,7 @@ Queue.prototype.run = function() {
   }
   
   var top = this._data.shift();
-  var cmd = 'echo '+top.cmd;
+  var cmd = 'adb shell '+top.cmd;
   
   return this.execute(cmd)
     .then(
@@ -41,14 +41,13 @@ Queue.prototype.add = function(cmd) {
   return def.promise;
 }
 
-Queue.prototype.sendKeySet = function(keys, defer) {
+Queue.prototype._sendKeySet = function(keys, defer) {
   if (!this.execute) return; 
   
   var out = [];
-  var itr = this.sendKeySet.bind(this, keys, defer);
+  var itr = this._sendKeySet.bind(this, keys, defer);
               
   if (keys.length === 0) { //Done
-    console.log("Done with key sequence");
     defer.resolve();    
   } else {
     if (typeof keys[0] === 'number') { //If a keycode
@@ -69,7 +68,7 @@ Queue.prototype.sendKeySet = function(keys, defer) {
 
 Queue.prototype.sendKeys = function(keys) {
   var def = Q.defer();  
-  this.sendKeySet(keys.slice(), def);
+  process.nextTick(this._sendKeySet.bind(this, keys.slice(), def));
   return def.promise;
 }
 

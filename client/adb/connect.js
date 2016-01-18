@@ -59,11 +59,11 @@ function getAdbIP(localIp) {
   }
   process.nextTick(itr);
   
-  return def.promise();
+  return def.promise;
 }
 
 function adbConnect() {
-  return Q(getLocalIp)
+  return Q(getLocalIp())
     .then(getAdbIP)
     .then(function(ip) {
       console.log("Connecting to ", ip);

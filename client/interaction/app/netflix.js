@@ -3,7 +3,8 @@ var KEY_CODES = require('../key-codes')
 var BaseApp = require('./base');
 
 function Netflix() {}
-Netflix.prototype = BaseApp.prototype;
+BaseApp.extend(Netflix);
+
 Netflix.prototype.pkg = 'com.netflix.ninja/.MainActivity';
 
 Netflix.prototype.afterOpen = function(queue) {
@@ -15,7 +16,7 @@ Netflix.prototype.afterOpen = function(queue) {
     .delay(5000)
 }
 
-Netflix.prototype.find = function(queue, query) {
+Netflix.prototype.findAndPlay = function(queue, query) {
   return Q.delay(1)
     .then(function() {
       return queue.sendKeys([KEY_CODES.DPAD_UP]);

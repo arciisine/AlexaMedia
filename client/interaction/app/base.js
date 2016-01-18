@@ -4,16 +4,21 @@ BaseApp.prototype.open = function(queue) {
   
   return queue.openApp(this.pkg)
     .then(function() {
-      return self.after(queue);
+      return self.afterOpen(queue);
     })
     .then(function() {
       if (self.query) { //If a query is provided
-        self.find(queue, self.query);
+        return self.findAndPlay(queue, self.query);
       }
     })
 }
 
 BaseApp.prototype.afterOpen = function(queue) {}
-BaseApp.prototype.find = function(queue, query) {}
+BaseApp.prototype.findAndPlay = function(queue, query) {}
+
+BaseApp.extend = function(cls) {
+  cls.prototype = new BaseApp();
+  cls.prototype.constructor = cls;
+}
 
 module.exports = BaseApp;
