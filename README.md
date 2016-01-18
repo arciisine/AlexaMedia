@@ -30,31 +30,31 @@ Things you will need:
  
 
 
-###Setup Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
+###Configure Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
   - Add New Skill
   - Pick a good invocation name, I use "tv"
   - Endpoint
     - We will be using AWS Lambda to host the speech handler
     - Will setup later
-  - Intent Schema (Use <project>/reousrces/intent.schema)
+  - Intent Schema (Use $projectRoot/reousrces/intent.schema)
   - Create a new Custom Slot Type
     - Name is ACTION
-    - Contents is in <project>/resources/action.type.slot
+    - Contents is in $projectRoot/resources/action.type.slot
   - Sample Utterances
     - Use utterances in resources/utterances.sample
   - Everything else is optional, as you will not be publishing your app
   
-###Setup Firebase Access (https://firebase.com)
-  - Utilize <project>/resources/firebase-rules.json
+###Create Firebase Access (https://firebase.com)
+  - Utilize $projectRoot/resources/firebase-rules.json
   - Generate new secret key under secrets menu
   
-###Setup Configuration JSON
-  - Setup fill out <project>/resources/config.sample.json to config.json
-  - Copy or symlink <project>/resources/config.json to 
-    - <project>/client/ folder and 
-    - <project>/lambda/ folder 
+###Write Configuration JSON
+  - Setup fill out $projectRoot/resources/config.sample.json to config.json
+  - Copy or symlink $projectRoot/resources/config.json to 
+    - $projectRoot/client/ folder and 
+    - $projectRoot/lambda/ folder 
 
-###Setup Amazon Lambda 
+###Create Amazon Lambda 
   - Generate zip file: `cd lambda; zip ../lambda.zip *; cd -`
   - Go to https://console.aws.amazon.com/lambda/home
   - Make sure you are in North East Region (Required for Alexa)
@@ -62,12 +62,12 @@ Things you will need:
   - Skip blueprint
   - Give it a Name
   - Runtime is Node.js
-  - Upload a .ZIP file (Select <project>/lambda.zip)
+  - Upload a .ZIP file (Select $projectRoot/lambda.zip)
   - You will also need to create a 'Basic execution role' if you don't have one already
   - After creating the Lambda, go to the Event Sources tab and "Add event source"
     - Event source type should be "Alexa Skills Kit"
   - Under Actions, Configure test event
-    - User <project>/resources/test-event.json
+    - User $projectRoot/resources/test-event.json
     - Fill in your app id 
   - Run Test
     - You should now start to see events showing up in your firebase console
