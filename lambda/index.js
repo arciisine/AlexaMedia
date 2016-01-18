@@ -21,7 +21,7 @@ MediaControl.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequ
 
 MediaControl.prototype.intentHandlers = {
   // register custom intent handlers
-  "Media": function (intent, session, response) {      
+  "AlexaMedia": function (intent, session, response) {      
     var query = intent.slots.query.value || '';
     var action = intent.slots.action.value || '';
     var msg =  { action : action, query : query, all : action + " " + query };

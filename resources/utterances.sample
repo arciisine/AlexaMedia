@@ -1,9 +1,9 @@
-Media to go {action}
-Media to {action}
-Media to {action} {a|query}
-Media to {action} {a|query} {b|query}
-Media to {action} {a|query} {b|query} {c|query}
-Media to {action} {a|query} {b|query} {c|query} {d|query}
-Media to {action} {a|query} {b|query} {c|query} {d|query} {e|query}
-Media to {action} {a|query} {b|query} {c|query} {d|query} {e|query} {f|query}
-Media to {action} {a|query} {b|query} {c|query} {d|query} {e|query} {f|query} {g|query}
+AlexaMedia to go {action}
+AlexaMedia to {action}
+AlexaMedia to {action} {a|query}
+AlexaMedia to {action} {a|query} {b|query}
+AlexaMedia to {action} {a|query} {b|query} {c|query}
+AlexaMedia to {action} {a|query} {b|query} {c|query} {d|query}
+AlexaMedia to {action} {a|query} {b|query} {c|query} {d|query} {e|query}
+AlexaMedia to {action} {a|query} {b|query} {c|query} {d|query} {e|query} {f|query}
+AlexaMedia to {action} {a|query} {b|query} {c|query} {d|query} {e|query} {f|query} {g|query}

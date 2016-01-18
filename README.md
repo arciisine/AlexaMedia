@@ -1,4 +1,4 @@
-Amzon Echo and Fire TV Stick Integration
+AlexaMedia: Amazon Echo and Fire TV (ADB Integration)
 ========================================
 
 Sample phrases that would work:

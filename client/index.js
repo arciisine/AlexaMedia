@@ -7,29 +7,25 @@ var queue;
 
 function onAction(action, query) {
   if (queue) {
-    //Kill any running operations
+    //Kill any running operations, one queue per request
     queue.kill();
+    queue = null;
   }
-  queue = new AdbQueue();
   
-  if (action === 'play' && query) {
-      //Lookup app from query (uses default if app not specified)
-      var app = interaction.appLookup(query);  
-      if (!app) {
-        return console.log("Error: App not found", action, query);
-      }    
-      //Tell the adb queue to run the proper commands to open the app
-      return app.open(queue);
+  queue = new AdbQueue();
+  //Otherwise try to call key of whatever command came in
+  var operator = interaction[action];
+  if (operator) {
+    return operator(queue, query).then(function() {
+      queue = null;
+    }); 
   } else {
-    //Otherwise try to call key of whatever command came in
-    return interaction.keyLookup[action](queue, query);
+    console.log("Unknown action", action);
   }
 }
 
 adbConnect().then(
-  function() {
-    firebaseListen(onAction);
-  },
+  firebaseListen.bind(null, onAction),
   function(err) {
     console.log("Error", err);
     process.exit(1);

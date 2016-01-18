@@ -1,6 +1,6 @@
 {
   "intents": [{    
-    "intent":  "Media",
+    "intent":  "AlexaMedia",
       "slots": [
       {
         "name":"query",
