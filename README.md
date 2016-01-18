@@ -36,23 +36,23 @@ Things you will need:
   - Endpoint
     - We will be using AWS Lambda to host the speech handler
     - Will setup later
-  - Intent Schema (Use $projectRoot/reousrces/intent.schema)
+  - Intent Schema (Use `$projectRoot/reousrces/intent.schema`)
   - Create a new Custom Slot Type
     - Name is ACTION
-    - Contents is in $projectRoot/resources/action.type.slot
+    - Contents is in `$projectRoot/resources/action.type.slot`
   - Sample Utterances
     - Use utterances in resources/utterances.sample
   - Everything else is optional, as you will not be publishing your app
   
 ###Create Firebase Access (https://firebase.com)
-  - Utilize $projectRoot/resources/firebase-rules.json
+  - Utilize `$projectRoot/resources/firebase-rules.json`
   - Generate new secret key under secrets menu
   
 ###Write Configuration JSON
-  - Setup fill out $projectRoot/resources/config.sample.json to config.json
-  - Copy or symlink $projectRoot/resources/config.json to 
-    - $projectRoot/client/ folder and 
-    - $projectRoot/lambda/ folder 
+  - Setup fill out `$projectRoot/resources/config.sample.json` to `$projectRoot/resources/config.json`
+  - Copy or symlink `$projectRoot/resources/config.json` to 
+    - `$projectRoot/client/` folder 
+    - `$projectRoot/lambda/` folder 
 
 ###Create Amazon Lambda 
   - Generate zip file: `cd lambda; zip ../lambda.zip *; cd -`
@@ -62,12 +62,12 @@ Things you will need:
   - Skip blueprint
   - Give it a Name
   - Runtime is Node.js
-  - Upload a .ZIP file (Select $projectRoot/lambda.zip)
+  - Upload a .ZIP file (Select `$projectRoot/lambda.zip`)
   - You will also need to create a 'Basic execution role' if you don't have one already
   - After creating the Lambda, go to the Event Sources tab and "Add event source"
     - Event source type should be "Alexa Skills Kit"
   - Under Actions, Configure test event
-    - User $projectRoot/resources/test-event.json
+    - User `$projectRoot/resources/test-event.json`
     - Fill in your app id 
   - Run Test
     - You should now start to see events showing up in your firebase console
