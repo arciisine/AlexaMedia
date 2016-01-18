@@ -1,15 +1,25 @@
 Amzon Echo and Fire TV Stick Integration
 ========================================
 
-How It Works:
-  - Alexa ask tv to pause
-  - Alexa ask tv to rewind
-  - Alexa ask tv to play ice age (Defaults to netflix)
-  - Alexa ask tv to play gotham on hulu
+Sample phrases that would work:
+  - `Alexa ask tv to pause`
+    - Issues pause key press 
+  - `Alexa ask tv to rewind`
+    - Issues rewind key press 3x (fast rewind)
+  - `Alexa ask tv to play ice age`
+    - Launches default app (Netflix)
+    - Navigates to search screen
+    - Types in `ice age`
+    - Plays first search result found
+  - `Alexa ask tv to play gotham on hulu`
+    - Launches Hulu
+    - Navigates to search screen
+    - Types in `gotham`
+    - Plays first search result found
   
 Apps currently supporting search and play:
-  - Hulu    
-  - Netflix  
+  - Hulu 
+  - Netflix
 
 The search and play feature relies on adb input events, and so timing is sensitive.  It may require some variation depending on FireTV vs FireTV stick.  This may even work with chromecast (or any other system accesible via adb).  
 
