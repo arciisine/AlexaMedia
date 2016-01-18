@@ -23,6 +23,12 @@ Apps currently supporting search and play:
 
 The search and play feature relies on adb input events, and so timing is sensitive.  It may require some variation depending on FireTV vs FireTV stick.  This may even work with chromecast (or any other system accesible via adb).  
 
+Architecture of Application 
+---------------------------------------
+![Architecture of Application](/resources/data-flow.png?raw=true "Architecture of Application")
+<br><br>
+
+
 Setup
 ---------------------------------------
 
@@ -37,11 +43,6 @@ Things you will need:
   - NodeJS
   - nmap
   - adb (Android Development Kit)
-
-###Architecture of Application 
-![Architecture of Application](/resources/data-flow.png?raw=true "Architecture of Application")
-<br><br>
-
 
 ###Configure Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
   - Add New Skill
