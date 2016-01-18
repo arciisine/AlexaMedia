@@ -26,7 +26,7 @@ MediaControl.prototype.intentHandlers = {
     var action = intent.slots.action.value || '';
     var msg =  { action : action, query : query, all : action + " " + query };
 
-    if (action === 'play' && query) {
+    if ((action === 'play' || action === 'watch') && query) {
       session.attributes = msg;
       response.ask("Do you want to "+msg.all);
     } else {
@@ -41,7 +41,7 @@ MediaControl.prototype.intentHandlers = {
     var msg = session.attributes;
     if (msg) {
       proxy_firebase(msg, function() {
-        response.tellWithCard("Will now " + msg.all, "Now Playing", msg.query);
+        response.tellWithCard("Will now " + msg.all, "Now Watching", msg.query);
       }, function(err) {
         response.tell("Invalid request. "+msg.all);
       });
