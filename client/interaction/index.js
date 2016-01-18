@@ -2,7 +2,7 @@ var KEY_CODES = require('./key-codes')
 var appLookup = require('./app');
 var utils = require('./utils');
 
-module.exports = {
+var actions = module.exports = {
   forward :  utils.timeline(KEY_CODES.FAST_FORWARD, 'fast', 15000),
   skip    :  utils.timeline(KEY_CODES.FAST_FORWARD, 'slow', 2000),
   pause   :  utils.keySender(KEY_CODES.PAUSE),
@@ -12,6 +12,7 @@ module.exports = {
   type    :  function(queue, query) { return queue.sendKeys(query); },
   rewind  :  utils.timeline(KEY_CODES.REWIND, 'fast', 15000),
   replay  :  utils.timeline(KEY_CODES.REWIND, 'slow', 1000),
+  watch   :  function(queue, query) { this.play(queue, query); },
   play    :  function(queue, query) {
     if (query) {
         var app = appLookup(query);  
