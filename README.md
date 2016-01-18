@@ -41,6 +41,8 @@ Things you will need:
 ###Architecture of Application 
 ![Architecture of Application](/resources/data-flow.png?raw=true "Architecture of Application")
 
+
+
 ###Configure Alexa Skills App(https://developer.amazon.com/edw/home.html#/skills/list)
   - Add New Skill
   - Pick a good invocation name, I use "tv"
