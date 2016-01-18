@@ -1,9 +1,6 @@
 var https = require('https');
 
-module.exports = function proxyRequest(config, message, success, failure) {
-  var host = config.namespace + '.firebaseio.com';
-  var path = '/'+config.topic+'.json?auth='+config.secret;
-
+module.exports = function proxyRequest(host, path, message, success, failure) {
   var data = JSON.stringify(message);        
             
   // An object of options to indicate where to post to

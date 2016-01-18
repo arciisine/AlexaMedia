@@ -1,42 +1,39 @@
-var listener = require('./listener');
-var Queue = require('./queue');
-var wait = require('./utils').wait;
-var connect = require('./local-connect');
-var mappings = require('./mappings');
+var AdbQueue = require('./adb/queue');
+var adbConnect = require('./adb/connect');
+var firebaseListen = require('./firebase/listen');
+var interactions = require('./interactions');
 
 var queue;
 
 function onAction(action, query) {
   if (queue) {
+    //Kill any running operations
     queue.kill();
   }
-  queue = new Queue();
+  queue = new AdbQueue();
   
-  switch(action) {
-    case 'play':
-      if (!query) {
-          return queue.sendKeys(mappings.KEY_MAPPING[action] || []);
-      }
-      
-      var item = mappings.extractApp(query);      
-      var cb = function() {}
-      if (item.query) {
-        cb = function() {
-          item.app.find(queue, item.query);
-        }
-      }
-      return queue.openApp(item.app, cb);
-    case 'type':  return queue.sendKeys([query]);
-    default:
-      return queue.sendKeys(mappings.KEY_MAPPING[action] || []);
+  if (action === 'play' && query) {
+      //Lookup app from query (uses default if app not specified)
+      var app = interactions.appLookup(query);  
+      if (!app) {
+        return console.log("Error: App not found", action, query);
+      }    
+      //Tell the adb queue to run the proper commands to open the app
+      return app.open(queue);
+  } else if (action === 'type') {
+    //Type out text into form
+    return queue.sendKeys([query]);
+  } else {
+    //Otherwise try to call key of whatever command came in
+    return queue.sendKeys(interactions.keyLookup[action] || []);
   }
 }
 
-connect(function(err, res) {
+adbConnect(function(err, res) {
   if (err) {
     console.log("Error", err);
     process.exit(1);
   } else {
-    listener(onAction);
+    firebaseListen(onAction);
   }
 });

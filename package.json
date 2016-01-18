@@ -18,6 +18,7 @@
   "homepage": "https://github.com/timothysoehnlin/AlexaMedia#readme",
   "dependencies": {
     "firebase": "^2.3.2",
-    "portscanner": "^1.0.0"
+    "portscanner": "^1.0.0",
+    "q": "^1.4.1"
   }
 }

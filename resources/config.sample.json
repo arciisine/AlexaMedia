@@ -1,6 +1,10 @@
 {
-  "namespace" : "<firebase app name>",
-  "topic" : "<firebase app topic>",
-  "secret" : "<firebase secret>",
-  "appId" : "<amazon alexa skills app ID>"
+  "firebase" : {
+    "namespace" : "<firebase app name>",
+    "topic" : "<firebase app topic>",
+    "secret" : "<firebase secret>"
+  },
+  "alexa" : {
+    "appId" : "<amazon alexa skills app ID>"
+  }
 }

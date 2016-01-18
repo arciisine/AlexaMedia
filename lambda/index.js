@@ -1,10 +1,15 @@
 var proxy = require('./proxy');
-var config = JSON.parse(require('fs').readFileSync('./config.json'));
+var config = require('./config.json');
+
+var proxy_firebase = proxy.bind(null,
+  config.firebase.namespace + '.firebaseio.com',
+  '/'+config.firebase.topic+'.json?auth='+config.firebase.secret 
+)
 
 var AlexaSkill = require('./alexa-skill');
 
 var MediaControl = function () {
-  AlexaSkill.call(this, config.appId);
+  AlexaSkill.call(this, config.alexa.appId);
 };
 
 // Extend AlexaSkill
@@ -25,7 +30,7 @@ MediaControl.prototype.intentHandlers = {
       session.attributes = msg;
       response.ask("Do you want to "+msg.all);
     } else {
-      proxy(config, msg, function() {
+      proxy_firebase(msg, function() {
         response.tell("");
       }, function(err) {
         response.tell("Invalid request. "+msg.all);
@@ -35,7 +40,7 @@ MediaControl.prototype.intentHandlers = {
   "AMAZON.YesIntent": function (intent, session, response) {
     var msg = session.attributes;
     if (msg) {
-      proxy(config, msg, function() {
+      proxy_firebase(msg, function() {
         response.tellWithCard("Will now " + msg.all, "Now Playing", msg.query);
       }, function(err) {
         response.tell("Invalid request. "+msg.all);
