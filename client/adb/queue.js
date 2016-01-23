@@ -77,6 +77,17 @@ Queue.prototype.sendKeys = function(keys) {
   return def.promise;
 }
 
+Queue.prototype.sendKeysRepeat = function(n, keys) {
+  keys = Array.isArray(keys) ? keys : Array.prototype.slice.call(arguments, 1);
+  
+  var out = [];
+  for (var i = 0; i < n; i++) {
+    out = out.concat(keys);
+  }
+  
+  return this.sendKeys(out);
+}
+
 Queue.prototype.openApp = function(activity) {
   if (!this.execute) return;
   return this.add('am start -W -S -a android.intent.action.MAIN -n '+activity);
