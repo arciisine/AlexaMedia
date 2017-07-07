@@ -50,7 +50,7 @@ Things you will need:
   - Endpoint
     - We will be using AWS Lambda to host the speech handler
     - Will setup later
-  - Intent Schema (Use `$projectRoot/reousrces/intent.schema`)
+  - Intent Schema (Use `$projectRoot/resources/intent.schema`)
   - Create a new Custom Slot Type
     - Name is ACTION
     - Contents is in `$projectRoot/resources/action.type.slot`
