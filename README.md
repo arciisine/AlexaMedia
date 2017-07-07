@@ -62,13 +62,13 @@ Things you will need:
   - Utilize `$projectRoot/resources/firebase-rules.json`
   - Generate new secret key under secrets menu
   
-###Write Configuration JSON
+### Write Configuration JSON
   - Setup fill out `$projectRoot/resources/config.sample.json` to `$projectRoot/resources/config.json`
   - Copy or symlink `$projectRoot/resources/config.json` to 
     - `$projectRoot/client/` folder 
     - `$projectRoot/lambda/` folder 
 
-###Create Amazon Lambda 
+### Create Amazon Lambda 
   - Generate zip file: `cd lambda; zip ../lambda.zip *; cd -`
   - Go to https://console.aws.amazon.com/lambda/home
   - Make sure you are in North East Region (Required for Alexa)
